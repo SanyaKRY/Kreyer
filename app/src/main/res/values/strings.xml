@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TinkoffTask</string>
+
+    <!--    MainScreen Fragment-->
+    <string name="popular">Популярные</string>
+
+    <!--    Error Layout-->
+    <string name="repeat">Повторить</string>
+    <string name="error_message">Произошла ошибка при загрузке данных,\n проверьте подключение к сети</string>
+
+    <!--    DetailFilm Fragment-->
+    <string name="genres">Жанры</string>
+    <string name="contries">Страны</string>
+</resources>
