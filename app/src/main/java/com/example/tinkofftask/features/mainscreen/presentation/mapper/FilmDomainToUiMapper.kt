@@ -13,8 +13,24 @@ object FilmDomainToUiMapper {
                 posterUrl = it.posterUrlPreview,
                 posterUrlPreview = it.posterUrlPreview,
                 genres = it.genres,
-                countries = it.countries
+                countries = it.countries,
+                isSavedToDataBase = it.isSavedToDataBase
             )
         }
+    }
+}
+
+object FilmUiToDomainMapper {
+    fun map(type: FilmUi): FilmDomain {
+        return FilmDomain(
+                filmId = type.filmId,
+                year = type.year,
+                nameRu = type.nameRu,
+                posterUrl = type.posterUrlPreview,
+                posterUrlPreview = type.posterUrlPreview,
+                genres = type.genres,
+                countries = type.countries,
+                isSavedToDataBase = !type.isSavedToDataBase
+            )
     }
 }

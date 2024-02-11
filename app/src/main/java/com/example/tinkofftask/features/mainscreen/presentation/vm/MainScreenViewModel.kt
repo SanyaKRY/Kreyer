@@ -12,16 +12,24 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import com.example.tinkofftask.core.datatype.Result
+import com.example.tinkofftask.features.mainscreen.domain.usecase.DeleteFilmByFilmIdFromDataBaseUseCase
+import com.example.tinkofftask.features.mainscreen.domain.usecase.InsertFilmToDataBaseUseCase
+import com.example.tinkofftask.features.mainscreen.presentation.event.DeleteFilmFromDataBase
+import com.example.tinkofftask.features.mainscreen.presentation.event.InsertFilmToDataBase
 import com.example.tinkofftask.features.mainscreen.presentation.event.MainScreenEvent
 import com.example.tinkofftask.features.mainscreen.presentation.event.ReloadListOfFilms
 import com.example.tinkofftask.features.mainscreen.presentation.mapper.FilmDomainToUiMapper
+import com.example.tinkofftask.features.mainscreen.presentation.mapper.FilmUiToDomainMapper
+import com.example.tinkofftask.features.mainscreen.presentation.model.FilmUi
 import com.example.tinkofftask.features.mainscreen.presentation.model.MainScreenState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val getListOfFilmsUseCase: GetListOfFilmsUseCase
+    private val getListOfFilmsUseCase: GetListOfFilmsUseCase,
+    private val insertFilmToDataBaseUseCase: InsertFilmToDataBaseUseCase,
+    private val deleteFilmByFilmIdFromDataBaseUseCase: DeleteFilmByFilmIdFromDataBaseUseCase
 ) : ViewModel() {
 
     private val _stateFlow: MutableStateFlow<MainScreenState> =
@@ -36,6 +44,20 @@ class MainScreenViewModel @Inject constructor(
     fun handleIntent(event: MainScreenEvent) {
         when (event) {
             is ReloadListOfFilms -> reloadListOfFilms()
+            is InsertFilmToDataBase -> insertFilmToDataBase(event.film)
+            is DeleteFilmFromDataBase -> deleteFilmFromDataBase(event.film)
+        }
+    }
+
+    private fun insertFilmToDataBase(film: FilmUi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            insertFilmToDataBaseUseCase.execute(FilmUiToDomainMapper.map(film))
+        }
+    }
+
+    private fun deleteFilmFromDataBase(film: FilmUi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteFilmByFilmIdFromDataBaseUseCase.execute(FilmUiToDomainMapper.map(film))
         }
     }
 

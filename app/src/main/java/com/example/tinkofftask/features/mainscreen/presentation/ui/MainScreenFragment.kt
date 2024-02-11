@@ -1,7 +1,6 @@
 package com.example.tinkofftask.features.mainscreen.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tinkofftask.databinding.FragmentMainScreenBinding
 import com.example.tinkofftask.features.di.AdapterModule
+import com.example.tinkofftask.features.mainscreen.presentation.event.DeleteFilmFromDataBase
+import com.example.tinkofftask.features.mainscreen.presentation.event.InsertFilmToDataBase
 import com.example.tinkofftask.features.mainscreen.presentation.event.ReloadListOfFilms
 import com.example.tinkofftask.features.mainscreen.presentation.model.FilmUi
 import com.example.tinkofftask.features.mainscreen.presentation.ui.recyclerview.FilmAdapter
@@ -42,6 +43,15 @@ class MainScreenFragment : Fragment() {
             .actionMainScreenFragmentToDetailFilmFragment(filmUi)
         findNavController().navigate(action)
     }
+    private val insertDeleteFilmListener: (
+        filmUi: FilmUi
+    ) -> Unit = { filmUi ->
+        if (filmUi.isSavedToDataBase) {
+            viewModel.handleIntent(DeleteFilmFromDataBase(filmUi))
+        } else {
+            viewModel.handleIntent(InsertFilmToDataBase(filmUi))
+        }
+    }
     private lateinit var filmAdapter: FilmAdapter
     private lateinit var recyclerView: RecyclerView
 
@@ -62,7 +72,7 @@ class MainScreenFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        filmAdapter = customAdapterFactory.createFilmAdapter(filmDetailsListener)
+        filmAdapter = customAdapterFactory.createFilmAdapter(filmDetailsListener, insertDeleteFilmListener)
         recyclerView = binding.recyclerView
         recyclerView.apply {
             adapter = filmAdapter
@@ -80,7 +90,6 @@ class MainScreenFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.stateFlow.collect { result ->
-                    Log.d("LogCat", "$result")
                     binding.spinner.root.isVisible = result.isLoading
                     filmAdapter.submitList(result.listOfFilms)
                     binding.error.root.isVisible = result.error != null

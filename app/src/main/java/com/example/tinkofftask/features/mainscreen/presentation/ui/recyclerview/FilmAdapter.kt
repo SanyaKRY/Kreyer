@@ -10,7 +10,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 class FilmAdapter @AssistedInject constructor(
-    @Assisted private val filmDetailListener: (
+    @Assisted("filmDetailListener") private val filmDetailListener: (
+        filmUi: FilmUi
+    ) -> Unit,
+    @Assisted("insertDeleteFilmListener") private val insertDeleteFilmListener: (
         filmUi: FilmUi
     ) -> Unit
 ) : ListAdapter<FilmUi, ViewHolderFilm>(
@@ -19,11 +22,8 @@ class FilmAdapter @AssistedInject constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFilm {
         val itemViewHolder = FilmItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false)
-
         val viewHolder = ViewHolderFilm(itemViewHolder)
-
         setItemListener(viewHolder)
-
         return viewHolder
     }
 
@@ -35,11 +35,24 @@ class FilmAdapter @AssistedInject constructor(
     }
 
     private fun setItemListener(viewHolderFilm: ViewHolderFilm) {
+        // ClickListener
         viewHolderFilm.itemView.setOnClickListener {
             val position = viewHolderFilm.bindingAdapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 filmDetailListener.invoke(getItem(position))
             }
+        }
+        // LongClickListener
+        viewHolderFilm.itemView.setOnLongClickListener {
+            val position = viewHolderFilm.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                insertDeleteFilmListener.invoke(getItem(position))
+                getItem(position).apply {
+                    isSavedToDataBase = !isSavedToDataBase
+                }
+                viewHolderFilm.animateFavoriteIcon( getItem(position).isSavedToDataBase)
+            }
+            true
         }
     }
 }

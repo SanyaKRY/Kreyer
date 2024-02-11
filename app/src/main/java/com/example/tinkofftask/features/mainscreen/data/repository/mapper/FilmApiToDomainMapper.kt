@@ -1,6 +1,7 @@
 package com.example.tinkofftask.features.mainscreen.data.repository.mapper
 
 import com.example.tinkofftask.features.mainscreen.data.datasource.api.model.FilmApi
+import com.example.tinkofftask.features.mainscreen.data.datasource.database.model.FavoriteFilmTable
 import com.example.tinkofftask.features.mainscreen.domain.model.FilmDomain
 
 object FilmApiToDomainMapper {
@@ -13,8 +14,19 @@ object FilmApiToDomainMapper {
                 posterUrl = it.posterUrlPreview,
                 posterUrlPreview = it.posterUrlPreview,
                 genres = it.genres.map { genres -> genres.genre },
-                countries = it.countries.map { countries -> countries.country }
+                countries = it.countries.map { countries -> countries.country },
+                isSavedToDataBase = false
             )
         }
+    }
+}
+
+object FilmDomainToDataBaseMapper {
+    fun map(type: FilmDomain): FavoriteFilmTable {
+        return FavoriteFilmTable(
+            id  = 0,
+            filmId = type.filmId,
+            posterUrl = type.posterUrl
+        )
     }
 }

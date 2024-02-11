@@ -7,5 +7,6 @@ data class FilmDomain(
     val posterUrl: String,
     val posterUrlPreview: String,
     val genres: List<String>,
-    val countries: List<String>
+    val countries: List<String>,
+    var isSavedToDataBase: Boolean
 )
