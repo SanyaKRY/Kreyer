@@ -10,8 +10,6 @@ interface MainScreenRepository {
 
     suspend fun insertToDataBase(film: FilmDomain): Result<Unit>
 
-//    suspend fun deleteFromDataBase(film: FilmDomain): Result<Unit>
-
     suspend fun deleteByFilmIdFromDataBase(film: FilmDomain): Result<Unit>
 
     fun getFavoriteFilms(): Result<List<FavoriteFilmTable>>

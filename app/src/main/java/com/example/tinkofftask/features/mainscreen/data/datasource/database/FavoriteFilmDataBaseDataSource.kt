@@ -4,6 +4,9 @@ import com.example.tinkofftask.features.mainscreen.data.datasource.database.dao.
 import com.example.tinkofftask.features.mainscreen.data.datasource.database.model.FavoriteFilmTable
 import javax.inject.Inject
 import com.example.tinkofftask.core.datatype.Result
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 
 class FavoriteFilmDataBaseDataSource @Inject constructor(
     private val favoriteFilmDao: FavoriteFilmDao
@@ -33,6 +36,14 @@ class FavoriteFilmDataBaseDataSource @Inject constructor(
             Result.Success(result)
         } catch (ex: Exception) {
             Result.Error(Exception(ex))
+        }
+    }
+
+    fun getAllFavoriteFilmFlow(): Flow<Result<List<FavoriteFilmTable>>> {
+        return favoriteFilmDao.getAllFavoriteFilmFlow().map {
+            Result.Success(it) as Result<List<FavoriteFilmTable>>
+        }.catch {
+            emit(Result.Error(Exception(it)))
         }
     }
 }

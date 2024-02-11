@@ -8,5 +8,8 @@ data class FavoriteFilmTable(
     @PrimaryKey(autoGenerate = true)
     var id : Int,
     val filmId: Int,
-    val posterUrl: String
+    val posterUrl: String,
+    val year: String,
+    val nameRu: String,
+    val genre: String
 )

@@ -26,7 +26,10 @@ object FilmDomainToDataBaseMapper {
         return FavoriteFilmTable(
             id  = 0,
             filmId = type.filmId,
-            posterUrl = type.posterUrl
+            posterUrl = type.posterUrl,
+            year = type.year,
+            nameRu = type.nameRu,
+            genre = type.genres[0]
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.tinkofftask.features.mainscreen.data.datasource.database.model.FavoriteFilmTable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteFilmDao {
@@ -16,4 +17,7 @@ interface FavoriteFilmDao {
 
     @Query("SELECT * FROM favorite_film_table")
     fun getAllFavoriteFilm(): List<FavoriteFilmTable>
+
+    @Query("SELECT * FROM favorite_film_table")
+    fun getAllFavoriteFilmFlow(): Flow<List<FavoriteFilmTable>>
 }

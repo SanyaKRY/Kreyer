@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mainScreenFragment_to_detailFilmFragment"
             app:destination="@id/detailFilmFragment" />
+        <action
+            android:id="@+id/action_mainScreenFragment_to_favoriteFilmsFragment"
+            app:destination="@id/favoriteFilmsFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFilmFragment"
@@ -25,5 +28,14 @@
         <argument
             android:name="film"
             app:argType="com.example.tinkofftask.features.mainscreen.presentation.model.FilmUi" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFilmsFragment"
+        android:name="com.example.tinkofftask.features.favoritefilms.presentation.ui.FavoriteFilmsFragment"
+        android:label="fragment_favorite_films"
+        tools:layout="@layout/fragment_favorite_films" >
+        <action
+            android:id="@+id/action_favoriteFilmsFragment_to_mainScreenFragment"
+            app:destination="@id/mainScreenFragment" />
     </fragment>
 </navigation>
