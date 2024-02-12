@@ -20,4 +20,7 @@ interface FavoriteFilmDao {
 
     @Query("SELECT * FROM favorite_film_table")
     fun getAllFavoriteFilmFlow(): Flow<List<FavoriteFilmTable>>
+
+    @Query("SELECT * FROM favorite_film_table WHERE nameRu like :searchQuery")
+    fun searchByName(searchQuery: String): Flow<List<FavoriteFilmTable>>
 }

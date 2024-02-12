@@ -22,4 +22,14 @@ class FavoriteFilmsScreenRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun searchFavoriteFilmByName(searchQuery: String): Flow<Result<List<FavoriteFilmDomain>>> {
+        return favoriteFilmDataBaseDataSource.searchFavoriteFilmByName(searchQuery).map { result ->
+            when (result) {
+                is Result.Success -> Result.Success(FavoriteFilmDataBaseToDomainMapper.map(result.data))
+                is Result.Error -> Result.Error(result.error)
+                is Result.Loading -> Result.Loading
+            }
+        }
+    }
 }

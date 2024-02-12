@@ -46,4 +46,12 @@ class FavoriteFilmDataBaseDataSource @Inject constructor(
             emit(Result.Error(Exception(it)))
         }
     }
+
+    fun searchFavoriteFilmByName(searchQuery: String): Flow<Result<List<FavoriteFilmTable>>> {
+        return favoriteFilmDao.searchByName(searchQuery).map {
+            Result.Success(it) as Result<List<FavoriteFilmTable>>
+        }.catch {
+            emit(Result.Error(Exception(it)))
+        }
+    }
 }

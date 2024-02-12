@@ -14,11 +14,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import com.example.tinkofftask.core.datatype.Result
+import com.example.tinkofftask.features.favoritefilms.domain.usecase.SearchFavoriteFilmByName
 import com.example.tinkofftask.features.favoritefilms.presentation.mapper.FavoriteFilmsDomainToUiMapper
 
 @HiltViewModel
 class FavoriteFilmsViewModel  @Inject constructor(
-    private val getFavoriteFilmsUseCase: GetFavoriteFilmsUseCase
+    private val getFavoriteFilmsUseCase: GetFavoriteFilmsUseCase,
+    private val searchFavoriteFilmByName: SearchFavoriteFilmByName
 ) : ViewModel() {
 
     private val _stateFlow: MutableStateFlow<FavoriteFilmsScreenState> =
@@ -28,6 +30,27 @@ class FavoriteFilmsViewModel  @Inject constructor(
 
     init {
         getFavoriteFilmsByDatabase()
+    }
+
+    private fun searchFavoriteFilmByName(searchQuery: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val flow: Flow<Result<List<FavoriteFilmDomain>>> = searchFavoriteFilmByName.execute(searchQuery)
+            withContext(Dispatchers.Main) {
+                flow.collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            // TODO
+                        }
+                        is Result.Error -> {
+                            // very sad :(
+                        }
+                        is Result.Loading -> {
+                            // very sad :(
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun getFavoriteFilmsByDatabase() {

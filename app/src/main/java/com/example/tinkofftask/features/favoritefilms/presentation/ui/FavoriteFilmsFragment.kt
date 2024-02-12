@@ -3,8 +3,13 @@ package com.example.tinkofftask.features.favoritefilms.presentation.ui
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tinkofftask.R
 import com.example.tinkofftask.databinding.FragmentFavoriteFilmsBinding
 import com.example.tinkofftask.features.favoritefilms.presentation.ui.recyclerview.FavoriteFilmAdapter
 import com.example.tinkofftask.features.favoritefilms.presentation.vm.FavoriteFilmsViewModel
@@ -21,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FavoriteFilmsFragment : Fragment() {
+class FavoriteFilmsFragment : Fragment(), MenuProvider {
 
     private val viewModel: FavoriteFilmsViewModel by viewModels()
 
@@ -47,6 +53,7 @@ class FavoriteFilmsFragment : Fragment() {
         setUpRecyclerView()
         observerFlow()
         observerButton()
+        activity?.addMenuProvider(this)
     }
 
     private fun setUpRecyclerView() {
@@ -85,5 +92,13 @@ class FavoriteFilmsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return true
     }
 }

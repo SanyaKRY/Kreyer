@@ -7,4 +7,6 @@ import com.example.tinkofftask.features.favoritefilms.domain.model.FavoriteFilmD
 interface FavoriteFilmsScreenRepository {
 
     fun getFavoriteFilms(): Flow<Result<List<FavoriteFilmDomain>>>
+
+    fun searchFavoriteFilmByName(searchQuery: String): Flow<Result<List<FavoriteFilmDomain>>>
 }

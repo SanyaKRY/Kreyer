@@ -9,16 +9,18 @@
     android:fitsSystemWindows="true"
     tools:context=".features.favoritefilms.presentation.ui.FavoriteFilmsFragment">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/popular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="@string/favorite" />
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:title="@string/favorite"
+        app:menu="@menu/menu"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -28,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:listitem="@layout/film_item" />
 
     <include
