@@ -11,28 +11,33 @@ class GetListOfFilmsUseCase @Inject constructor(
 
     suspend fun execute(): Result<List<FilmDomain>> {
 
-        return when (val result: Result<List<FilmDomain>> = mainScreenRepository.getListOfFilms()) {
-            is Result.Success -> {
-                val favoriteFilmId = mutableListOf<Int>()
-                when (val resultFavoriteFilm = mainScreenRepository.getFavoriteFilms()) {
-                    is Result.Success -> {
-                        resultFavoriteFilm.data.map {
-                            favoriteFilmId.add(it.filmId)
-                            it.filmId
+        val totalListOfFilms = mutableListOf<FilmDomain>()
+
+        for(i in 1..5) {
+            when (val result: Result<List<FilmDomain>> = mainScreenRepository.getListOfFilms(i)) {
+                is Result.Success -> {
+                    val favoriteFilmId = mutableListOf<Int>()
+                    when (val resultFavoriteFilm = mainScreenRepository.getFavoriteFilms()) {
+                        is Result.Success -> {
+                            resultFavoriteFilm.data.map {
+                                favoriteFilmId.add(it.filmId)
+                                it.filmId
+                            }
+                        }
+                        is Result.Error -> {}
+                        is Result.Loading -> {}
+                    }
+                    result.data.forEach{
+                        if (favoriteFilmId.contains(it.filmId)) {
+                            it.isSavedToDataBase = true
                         }
                     }
-                    is Result.Error -> {}
-                    is Result.Loading -> {}
+                    totalListOfFilms.addAll(result.data)
                 }
-                result.data.forEach{
-                    if (favoriteFilmId.contains(it.filmId)) {
-                        it.isSavedToDataBase = true
-                    }
-                }
-                Result.Success(result.data)
+                is Result.Error ->  return Result.Error(result.error)
+                is Result.Loading -> return Result.Loading
             }
-            is Result.Error -> Result.Error(result.error)
-            is Result.Loading -> Result.Loading
         }
+        return Result.Success(totalListOfFilms)
     }
 }

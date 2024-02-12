@@ -11,5 +11,6 @@ interface FilmsApiService {
     @Headers("X-API-KEY: ${BuildConfig.X_API_KEY}")
     @GET("/api/v2.2/films/top")
     suspend fun getListOfFilms(
+        @Query("page") page: Int
     ): FilmsApi
 }

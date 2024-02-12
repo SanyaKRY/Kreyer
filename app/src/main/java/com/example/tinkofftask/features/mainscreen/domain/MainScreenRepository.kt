@@ -6,7 +6,7 @@ import com.example.tinkofftask.features.mainscreen.data.datasource.database.mode
 
 interface MainScreenRepository {
 
-    suspend fun getListOfFilms(): Result<List<FilmDomain>>
+    suspend fun getListOfFilms(page: Int): Result<List<FilmDomain>>
 
     suspend fun insertToDataBase(film: FilmDomain): Result<Unit>
 

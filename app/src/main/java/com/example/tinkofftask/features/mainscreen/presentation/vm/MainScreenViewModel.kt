@@ -38,7 +38,7 @@ class MainScreenViewModel @Inject constructor(
         get() = _stateFlow
 
     init {
-        getListOfFilms()
+        getTop100ListOfFilms()
     }
 
     fun handleIntent(event: MainScreenEvent) {
@@ -65,11 +65,11 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _stateFlow.value =
                 _stateFlow.value.copy(listOfFilms = emptyList(), isLoading = true, error = null)
-            getListOfFilms()
+            getTop100ListOfFilms()
         }
     }
 
-    private fun getListOfFilms() {
+    private fun getTop100ListOfFilms() {
         viewModelScope.launch(Dispatchers.IO) {
             delay(2_000)
             val result: Result<List<FilmDomain>> = getListOfFilmsUseCase.execute()

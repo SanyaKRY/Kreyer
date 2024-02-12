@@ -10,9 +10,9 @@ class FilmsNetworkDataSource @Inject constructor(
     private val filmsApiService: FilmsApiService
 ) {
 
-    suspend fun getListOfFilms(): Result<FilmsApi> {
+    suspend fun getListOfFilms(page: Int): Result<FilmsApi> {
         return try {
-            val listOfFilms = filmsApiService.getListOfFilms()
+            val listOfFilms = filmsApiService.getListOfFilms(page)
             Result.Success(listOfFilms)
         } catch (ex: Exception) {
             Result.Error(ex)

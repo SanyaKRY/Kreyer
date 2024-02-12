@@ -16,8 +16,8 @@ class MainScreenRepositoryImpl @Inject constructor(
     private val favoriteFilmDataBaseDataSource: FavoriteFilmDataBaseDataSource
 ) : MainScreenRepository {
 
-    override suspend fun getListOfFilms(): Result<List<FilmDomain>> {
-            return when (val result: Result<FilmsApi> = filmsNetworkDataSource.getListOfFilms()) {
+    override suspend fun getListOfFilms(page: Int): Result<List<FilmDomain>> {
+            return when (val result: Result<FilmsApi> = filmsNetworkDataSource.getListOfFilms(page)) {
             is Result.Success -> Result.Success(FilmApiToDomainMapper.map(result.data.films))
             is Result.Error -> Result.Error(result.error)
             is Result.Loading -> Result.Loading
