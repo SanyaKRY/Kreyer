@@ -13,4 +13,10 @@ interface FilmsApiService {
     suspend fun getListOfFilms(
         @Query("page") page: Int
     ): FilmsApi
+
+    @Headers("X-API-KEY: ${BuildConfig.X_API_KEY}")
+    @GET("/api/v2.1/films/search-by-keyword")
+    suspend fun searchFilmByKey(
+        @Query("keyword") keyword: String
+    ): FilmsApi
 }

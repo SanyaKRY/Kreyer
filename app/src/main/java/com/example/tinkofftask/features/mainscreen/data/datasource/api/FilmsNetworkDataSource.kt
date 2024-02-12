@@ -18,4 +18,13 @@ class FilmsNetworkDataSource @Inject constructor(
             Result.Error(ex)
         }
     }
+
+    suspend fun searchFilmByKey(keyword: String): Result<FilmsApi> {
+        return try {
+            val listOfFilms = filmsApiService.searchFilmByKey(keyword)
+            Result.Success(listOfFilms)
+        } catch (ex: Exception) {
+            Result.Error(ex)
+        }
+    }
 }

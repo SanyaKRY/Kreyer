@@ -8,7 +8,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import com.example.tinkofftask.R
 import com.example.tinkofftask.databinding.FragmentFavoriteFilmsBinding
 import com.example.tinkofftask.features.favoritefilms.presentation.ui.recyclerview.FavoriteFilmAdapter
@@ -27,7 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FavoriteFilmsFragment : Fragment(), MenuProvider {
+class FavoriteFilmsFragment : Fragment() {
 
     private val viewModel: FavoriteFilmsViewModel by viewModels()
 
@@ -53,7 +55,41 @@ class FavoriteFilmsFragment : Fragment(), MenuProvider {
         setUpRecyclerView()
         observerFlow()
         observerButton()
-        activity?.addMenuProvider(this)
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu, menu)
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        val searchView = menuItem.actionView as? SearchView
+                        searchView?.queryHint = getText(R.string.search_descrption)
+                        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                            override fun onQueryTextSubmit(p0: String?): Boolean {
+                                searchView.clearFocus()
+                                return true
+                            }
+                            override fun onQueryTextChange(newText: String?): Boolean {
+                                if (newText != null) {
+                                    runQuery(newText)
+                                }
+                                return true
+                            }
+                        })
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    fun runQuery(query: String) {
+        val searchQuery = "%$query%"
+        viewModel.searchFavoriteFilmByName(searchQuery)
     }
 
     private fun setUpRecyclerView() {
@@ -92,13 +128,5 @@ class FavoriteFilmsFragment : Fragment(), MenuProvider {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu, menu)
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return true
     }
 }

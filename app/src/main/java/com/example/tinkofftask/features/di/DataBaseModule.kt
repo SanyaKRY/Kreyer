@@ -21,7 +21,7 @@ object DataBaseModule {
         return Room.databaseBuilder(
             appContext,
             FavoriteFilmDatabase::class.java,
-            "favorite_film_database"
+            "favorite_film_databas"
         ).build()
     }
 

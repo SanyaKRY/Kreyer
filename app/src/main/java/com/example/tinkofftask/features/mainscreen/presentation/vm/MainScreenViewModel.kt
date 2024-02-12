@@ -14,6 +14,7 @@ import javax.inject.Inject
 import com.example.tinkofftask.core.datatype.Result
 import com.example.tinkofftask.features.mainscreen.domain.usecase.DeleteFilmByFilmIdFromDataBaseUseCase
 import com.example.tinkofftask.features.mainscreen.domain.usecase.InsertFilmToDataBaseUseCase
+import com.example.tinkofftask.features.mainscreen.domain.usecase.SearchFilmByKeyUseCase
 import com.example.tinkofftask.features.mainscreen.presentation.event.DeleteFilmFromDataBase
 import com.example.tinkofftask.features.mainscreen.presentation.event.InsertFilmToDataBase
 import com.example.tinkofftask.features.mainscreen.presentation.event.MainScreenEvent
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val getListOfFilmsUseCase: GetListOfFilmsUseCase,
+    private val searchFilmByKeyUseCase: SearchFilmByKeyUseCase,
     private val insertFilmToDataBaseUseCase: InsertFilmToDataBaseUseCase,
     private val deleteFilmByFilmIdFromDataBaseUseCase: DeleteFilmByFilmIdFromDataBaseUseCase
 ) : ViewModel() {

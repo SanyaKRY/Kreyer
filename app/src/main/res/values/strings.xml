@@ -13,4 +13,7 @@
     <!--    DetailFilm Fragment-->
     <string name="genres">Жанры</string>
     <string name="contries">Страны</string>
+
+    <!--    FavoriteFilms Fragment-->
+    <string name="search_descrption">Поиск по русскому назвнанию..</string>
 </resources>

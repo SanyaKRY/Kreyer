@@ -8,6 +8,8 @@ interface MainScreenRepository {
 
     suspend fun getListOfFilms(page: Int): Result<List<FilmDomain>>
 
+    suspend fun searchFilmByKey(keyword: String): Result<List<FilmDomain>>
+
     suspend fun insertToDataBase(film: FilmDomain): Result<Unit>
 
     suspend fun deleteByFilmIdFromDataBase(film: FilmDomain): Result<Unit>

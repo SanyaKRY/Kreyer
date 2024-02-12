@@ -1,5 +1,6 @@
 package com.example.tinkofftask.features.favoritefilms.presentation.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tinkofftask.features.favoritefilms.domain.model.FavoriteFilmDomain
@@ -32,14 +33,18 @@ class FavoriteFilmsViewModel  @Inject constructor(
         getFavoriteFilmsByDatabase()
     }
 
-    private fun searchFavoriteFilmByName(searchQuery: String) {
+    fun searchFavoriteFilmByName(searchQuery: String) {
+        Log.d("CatLog", "searchQuery: $searchQuery")
         viewModelScope.launch(Dispatchers.IO) {
             val flow: Flow<Result<List<FavoriteFilmDomain>>> = searchFavoriteFilmByName.execute(searchQuery)
             withContext(Dispatchers.Main) {
                 flow.collect { result ->
                     when (result) {
                         is Result.Success -> {
-                            // TODO
+                            val list = FavoriteFilmsDomainToUiMapper.map(result.data)
+                            Log.d("CatLog", "$list")
+                            _stateFlow.value =
+                                _stateFlow.value.copy(listOfFilms = list, isLoading = false)
                         }
                         is Result.Error -> {
                             // very sad :(
@@ -66,7 +71,8 @@ class FavoriteFilmsViewModel  @Inject constructor(
                                 _stateFlow.value.copy(listOfFilms = list, isLoading = false)
                         }
                         is Result.Error -> {
-                            // very sad :(
+                            _stateFlow.value =
+                                _stateFlow.value.copy(listOfFilms = emptyList(), isLoading = false, error = result.error)
                         }
                         is Result.Loading -> {
                             // very sad :(

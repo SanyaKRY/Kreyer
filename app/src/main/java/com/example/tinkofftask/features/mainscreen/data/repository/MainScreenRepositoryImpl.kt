@@ -24,6 +24,14 @@ class MainScreenRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun searchFilmByKey(keyword: String): Result<List<FilmDomain>> {
+        return when (val result: Result<FilmsApi> = filmsNetworkDataSource.searchFilmByKey(keyword)) {
+            is Result.Success -> Result.Success(FilmApiToDomainMapper.map(result.data.films))
+            is Result.Error -> Result.Error(result.error)
+            is Result.Loading -> Result.Loading
+        }
+    }
+
     override suspend fun insertToDataBase(film: FilmDomain): Result<Unit> {
         return favoriteFilmDataBaseDataSource.insert(FilmDomainToDataBaseMapper.map(film))
     }
